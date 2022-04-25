@@ -4,6 +4,7 @@ import MapElement from "./MapElement";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { MintNFT } from "./components/MintNFT";
+import { GetAllNFT } from "./components/GetAllNFT";
 
 // This is only to prevent console errors
 const defaultTextLayer = {
@@ -43,7 +44,7 @@ const Flow = () => {
     <div>
       <Wallet />
 
-      <GetUserNFT setMapData={setMapData} setTextLayer={setTextLayer} />
+      <GetAllNFT setMapData={setMapData} setTextLayer={setTextLayer} />
       <MintNFT />
 
       <div className="flex flex-col">

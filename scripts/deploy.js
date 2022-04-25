@@ -41,7 +41,7 @@ const main = async () => {
   // let h = { long: 119.399414062, lat: -23.644524198 };
 
   // // NFT 2
-  // txn = await nftContract.mintNFT(
+  // txn = await nftContract.connect(addr1).mintNFT(
   //   convertToUnsigned(e),
   //   convertToUnsigned(f),
   //   convertToUnsigned(g),
@@ -49,6 +49,14 @@ const main = async () => {
   // );
 
   // await txn.wait();
+
+  // let supply = await nftContract.totalSupply();
+  // console.log(supply.toNumber());
+
+  // for (var i = 1; i <= supply.toNumber(); i++) {
+  //   let uri = await nftContract.tokenURI(i);
+  //   console.log(i, uri);
+  // }
 
 };
 

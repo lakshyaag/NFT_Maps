@@ -2,9 +2,9 @@ import { useContract, useSigner } from "wagmi";
 import { convert } from "../utils/convert";
 import contractAbi from "../utils/mapNFT.json";
 
-const CONTRACT_ADDRESS = "0xdE925B3c8b5734c3a7ba5fC68a6aa3ebB6bd80D4";
+const CONTRACT_ADDRESS = "0xdBbD69e662e2eebe1b8049476774C003b99e0208";
 
-export const MintNFT = ({ setMapData, setTextLayer }) => {
+export const MintNFT = () => {
   const [{ data: signerData }] = useSigner();
 
   const mapContract = useContract({
