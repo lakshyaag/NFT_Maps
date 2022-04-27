@@ -1,12 +1,10 @@
 import { useAccount, useConnect, useNetwork } from "wagmi";
 
 export const Wallet = () => {
-  const [{ data: connectData, error: connectError }, connect] = useConnect();
-  const [{ data: accountData }] = useAccount({
-    fetchEns: false,
-  });
+  const { connect, connectors, error: connectError } = useConnect();
+  const { data: accountData } = useAccount();
 
-  const [{ data: networkData }] = useNetwork();
+  const { activeChain: networkData } = useNetwork();
 
   if (accountData) {
     return (
@@ -14,8 +12,8 @@ export const Wallet = () => {
         <div className="flex flex-row items-center justify-around">
           <div className="font-bold text-center">
             <p>Connected to: {accountData.address}</p>
-            <p>Network: {networkData.chain.name ?? networkData.chain.id} </p>
-            {networkData.chain?.id !== 80001 && (
+            <p>Network: {networkData.name ?? networkData.id} </p>
+            {networkData?.id !== 80001 && (
               <p>You're on the wrong network!</p>
             )}
           </div>
@@ -27,7 +25,7 @@ export const Wallet = () => {
   return (
     <div className="flex flex-col items-end p-3">
       <div className="flex flex-row items-center justify-around">
-        {connectData.connectors.map((connector) => (
+        {connectors.map((connector) => (
           <button
             className="px-6 py-2 m-2 font-bold rounded-xl bg-amber-400 hover:bg-amber-500 transition-colors"
             disabled={!connector.ready}

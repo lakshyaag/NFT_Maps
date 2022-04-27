@@ -29,6 +29,7 @@ contract mapNFT is ERC721Enumerable, Ownable {
         Coordinate b;
         Coordinate c;
         Coordinate d;
+        string color;
     }
 
     mapping(uint256 => Polygon) public nftPolygon;
@@ -47,15 +48,16 @@ contract mapNFT is ERC721Enumerable, Ownable {
         Coordinate calldata a,
         Coordinate calldata b,
         Coordinate calldata c,
-        Coordinate calldata d
+        Coordinate calldata d,
+        string memory color
     ) external {
         uint256 newItemId = _tokenIds.current();
 
         require(balanceOf(msg.sender) < 1, "You can only have one NFT!");
-        
+
         _safeMint(msg.sender, newItemId);
 
-        nftPolygon[newItemId] = Polygon(a, b, c, d);
+        nftPolygon[newItemId] = Polygon(a, b, c, d, color);
 
         console.log(
             "A new NFT has been minted to %s with ID %s",
@@ -133,7 +135,9 @@ contract mapNFT is ERC721Enumerable, Ownable {
                 Strings.toString(_tokenId),
                 '", "id": ',
                 Strings.toString(_tokenId),
-                "},",
+                ', "color": "',
+                polygon.color,
+                '"},',
                 coordinateJson,
                 ",",
                 hemisphereJson,

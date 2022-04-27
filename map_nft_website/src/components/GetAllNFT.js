@@ -1,18 +1,19 @@
-import { useContract, useSigner } from "wagmi";
+import { useEffect } from "react";
+import { useAccount, useContract, useProvider } from "wagmi";
 import { combineMapData } from "../utils/combineMapData";
 import contractAbi from "../utils/mapNFT.json";
 import { parseData } from "../utils/parseData";
-import { parseTextLayer } from "../utils/parseTextLayer";
+import { CONTRACT_ADDRESS } from "../utils/contractAddress";
 
-const CONTRACT_ADDRESS = "0xdBbD69e662e2eebe1b8049476774C003b99e0208";
+export const GetAllNFT = ({ setMapData }) => {
 
-export const GetAllNFT = ({ setMapData, setTextLayer }) => {
-  const [{ data: signerData }] = useSigner();
+  const provider = useProvider({ chainId: 80001 }); // to be changed when deployed on mainnet
+  const { data: accountData } = useAccount();
 
   const mapContract = useContract({
     addressOrName: CONTRACT_ADDRESS,
     contractInterface: contractAbi.abi,
-    signerOrProvider: signerData,
+    signerOrProvider: provider
   });
 
   const totalSupply = async () => {
@@ -55,16 +56,13 @@ export const GetAllNFT = ({ setMapData, setTextLayer }) => {
     }
   }
 
+  useEffect(() => {
+    accountData?.address === undefined && getAllNFT();
+  }, [accountData])
+
   return (
-    <div className="flex flex-col items-center">
-      {signerData && (
-        <button
-          className="px-6 py-2 m-2 font-bold rounded-xl bg-red-400 hover:bg-red-600 transition-colors"
-          onClick={getAllNFT}
-        >
-          Get all NFTs
-        </button>
-      )}
-    </div>
-  );
+    <>
+
+    </>
+  )
 };
