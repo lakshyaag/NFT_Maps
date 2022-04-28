@@ -4,13 +4,14 @@ pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 
 import {Base64} from "./libraries/Base64.sol";
 
-contract mapNFT is ERC721, Ownable {
+contract mapNFT is ERC721Enumerable, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
@@ -28,6 +29,7 @@ contract mapNFT is ERC721, Ownable {
         Coordinate b;
         Coordinate c;
         Coordinate d;
+        string color;
     }
 
     mapping(uint256 => Polygon) public nftPolygon;
@@ -46,13 +48,16 @@ contract mapNFT is ERC721, Ownable {
         Coordinate calldata a,
         Coordinate calldata b,
         Coordinate calldata c,
-        Coordinate calldata d
+        Coordinate calldata d,
+        string memory color
     ) external {
         uint256 newItemId = _tokenIds.current();
 
+        require(balanceOf(msg.sender) < 1, "You can only have one NFT!");
+
         _safeMint(msg.sender, newItemId);
 
-        nftPolygon[newItemId] = Polygon(a, b, c, d);
+        nftPolygon[newItemId] = Polygon(a, b, c, d, color);
 
         console.log(
             "A new NFT has been minted to %s with ID %s",
@@ -130,7 +135,9 @@ contract mapNFT is ERC721, Ownable {
                 Strings.toString(_tokenId),
                 '", "id": ',
                 Strings.toString(_tokenId),
-                "},",
+                ', "color": "',
+                polygon.color,
+                '"},',
                 coordinateJson,
                 ",",
                 hemisphereJson,

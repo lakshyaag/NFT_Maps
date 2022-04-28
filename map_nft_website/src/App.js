@@ -1,12 +1,17 @@
-import { WagmiProvider } from "wagmi";
-import { InjectedConnector } from "wagmi/connectors/injected";
+import { providers } from 'ethers';
+import { WagmiProvider, createWagmiClient } from 'wagmi'
 import Flow from "./Flow";
 
-const connector = [new InjectedConnector()];
+const client = createWagmiClient({
+  autoConnect: false,
+  provider(config) {
+    return new providers.AlchemyProvider(config.chainId)
+  }
+})
 
 const App = () => {
   return (
-    <WagmiProvider autoConnect connectors={connector}>
+    <WagmiProvider client={client}>
       <Flow />
     </WagmiProvider>
   );
