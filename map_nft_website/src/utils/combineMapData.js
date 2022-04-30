@@ -1,3 +1,7 @@
+/** @dev Combine map data into a single GeoJSON block
+    @param parsedData Array of map data
+    @return Object containing polygon information with latitude and longtiude in a single GeoJSON block
+     */
 export const combineMapData = (parsedData) => {
 
   const combinedData = parsedData[0];

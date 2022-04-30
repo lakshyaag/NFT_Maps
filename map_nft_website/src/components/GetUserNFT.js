@@ -9,6 +9,7 @@ export const GetUserNFT = ({ setMapData }) => {
 
   const [hasNFT, setHasNFT] = useState(false);
 
+  // Create the contract object
   const mapContract = useContract({
     addressOrName: CONTRACT_ADDRESS,
     contractInterface: contractAbi.abi,
@@ -16,6 +17,8 @@ export const GetUserNFT = ({ setMapData }) => {
   });
 
   const getTokenUri = async (tokenId) => {
+    // Call tokenURI on given token id
+    // https://docs.openzeppelin.com/contracts/4.x/api/token/erc721#IERC721Metadata-tokenURI-uint256-
     const uri = await mapContract.tokenURI(tokenId);
     const response = await fetch(uri);
     const uriData = await response.json();
@@ -25,6 +28,7 @@ export const GetUserNFT = ({ setMapData }) => {
   };
 
   const getUserNFTs = async () => {
+    // Call getUserNFT to see if connected wallet has NFT
     const data = await mapContract.getUserNFT();
     try {
       const tokenId = data.toNumber();
@@ -32,6 +36,7 @@ export const GetUserNFT = ({ setMapData }) => {
 
       if (tokenId > 0) {
         setHasNFT(true);
+        // Get associated token URI
         const uriData = await getTokenUri(tokenId);
 
         const parsedMapData = parseData(uriData);

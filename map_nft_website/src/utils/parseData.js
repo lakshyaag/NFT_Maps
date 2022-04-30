@@ -1,3 +1,7 @@
+/** @dev Transform coordinate data to GeooJSON format 
+    @param data Token URI data
+    @return Object containing polygon information with latitude and longtiude
+*/
 export const parseData = (data) => {
   const RESOLUTION = 1e9;
 
@@ -17,6 +21,6 @@ export const parseData = (data) => {
 
   delete data.isWest;
   delete data.isSouth;
-  
+
   return data;
 };

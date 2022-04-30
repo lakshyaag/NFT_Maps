@@ -1,3 +1,4 @@
+// Deprecated, do not use
 export const parseTextLayer = (data) => {
   const textLayer = {
     id: "textLayer",

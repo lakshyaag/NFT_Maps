@@ -11,12 +11,19 @@ import "hardhat/console.sol";
 
 import {Base64} from "./libraries/Base64.sol";
 
+/** @title Map NFT */
 contract mapNFT is ERC721Enumerable, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
     uint256 private constant RESOLUTION = 1e9;
 
+    /** @dev Coordinate structure
+        @param long Longitude (0 to 180)
+        @param lat Latitude (0 to 90)
+        @param isWest 1 if longitude is west of the prime meridian, 0 otherwise
+        @param isSouth 1 if latitude is south of the equator, 0 otherwise
+     */
     struct Coordinate {
         uint256 long;
         uint256 lat;
@@ -24,6 +31,13 @@ contract mapNFT is ERC721Enumerable, Ownable {
         uint8 isSouth;
     }
 
+    /** @dev Polygon structure
+        @param a Coordinate A
+        @param b Coordinate B
+        @param c Coordinate C
+        @param d Coordinate D
+        @param color Color of the polygon
+     */
     struct Polygon {
         Coordinate a;
         Coordinate b;
@@ -44,6 +58,13 @@ contract mapNFT is ERC721Enumerable, Ownable {
         _tokenIds.increment();
     }
 
+    /** @dev Mint NFT
+        @param a Coordinate A
+        @param b Coordinate B
+        @param c Coordinate C
+        @param d Coordinate D
+        @param color Color of the polygon
+     */
     function mintNFT(
         Coordinate calldata a,
         Coordinate calldata b,
@@ -72,6 +93,10 @@ contract mapNFT is ERC721Enumerable, Ownable {
         emit newNftMinted(msg.sender, newItemId);
     }
 
+    /** @dev Token URI
+        @param _tokenId Token ID to get URI of
+        @return Token URI of given token id
+     */
     function tokenURI(uint256 _tokenId)
         public
         view
@@ -152,6 +177,9 @@ contract mapNFT is ERC721Enumerable, Ownable {
         return uri;
     }
 
+    /** @dev Check if caller has the NFT
+        @return tokenID, if exists, else 0
+     */
     function getUserNFT() public view returns (uint256) {
         uint256 userNftTokenId = nftHolders[msg.sender];
         return userNftTokenId;

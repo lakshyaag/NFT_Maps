@@ -1,3 +1,7 @@
+/** @dev Convert coordinate structure to solidity uint256
+    @param coordiantes Object containing latitude and longitude in degrees
+    @return Object containing latitude and longitude in uint256, isWest and isSouth in uint8
+*/
 const convertToUnsigned = (coordinates) => {
   const RESOLUTION = 1e9;
 
