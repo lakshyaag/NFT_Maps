@@ -1,4 +1,5 @@
 import Map, { Source, Layer } from "react-map-gl";
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 const MapElement = ({ nftBounds }) => {
   
@@ -12,7 +13,7 @@ const MapElement = ({ nftBounds }) => {
     type: "fill",
     source: geoJSON,
     paint: {
-      "fill-color": ['get', 'color'],
+      "fill-color": "#907bdb",
       "fill-opacity": 0.8,
     },
   };
@@ -33,12 +34,13 @@ const MapElement = ({ nftBounds }) => {
   return (
     <Map
       initialViewState={{
-        longitude: 0.0,
-        latitude: 0.0,
-        zoom: 1,
+        latitude: 38.8951,
+        longitude: -77.0364,
+        zoom: 3,
       }}
       maxZoom={10}
       style={{ width: "100vw", height: "80vh" }}
+      mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
       mapStyle="mapbox://styles/mapbox/streets-v9"
     >
       <Source id="nft-data" type="geojson" data={nftBounds}>
