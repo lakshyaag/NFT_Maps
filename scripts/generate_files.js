@@ -4,7 +4,7 @@ import us_states from "../utils/US_States.json" assert { type: 'json' };
 let features = us_states.features
 
 for (var i = 0; i < features.length; i++) {
-    features[i].properties.id = features[i].id;
+    features[i].properties.id = i + 1;
     delete features[i].properties.density;
     delete features[i].id;
 
