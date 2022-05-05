@@ -1,9 +1,6 @@
 import { CONTRACT_ADDRESS } from "../constants/contractAddress"
 import abi from "../constants/contractAbi.json"
 import { useEffect, useState } from "react"
-import { formatMapData } from "../utils/formatMapData"
-import MapElement from "./MapElement"
-import { ethers } from "ethers"
 import { useMoralis, useWeb3Contract } from "react-moralis"
 
 export default function MintNFT() {
