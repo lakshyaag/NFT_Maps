@@ -3,14 +3,19 @@ import abi from "../constants/contractAbi.json"
 import { useEffect, useState } from "react"
 import { useMoralis, useWeb3Contract } from "react-moralis"
 import { BASE_IPFS } from "../constants/baseIPFS"
-import { THIRDWEB_IPFS_CID } from "../constants/thirdWebIPFSCID"
 
 export default function MintNFT() {
   const { isWeb3Enabled, account } = useMoralis()
   const [balance, setBalance] = useState(null)
 
+  const THIRDWEB_IPFS_MINT = process.env.NEXT_PUBLIC_THIRDWEB_IPFS_MINT
+
   const mintURL =
-    BASE_IPFS + THIRDWEB_IPFS_CID + "drop.html?contract=" + CONTRACT_ADDRESS + "&chainId=80001"
+    BASE_IPFS +
+    THIRDWEB_IPFS_MINT +
+    "drop.html?contract=" +
+    CONTRACT_ADDRESS +
+    "&chainId=80001"
 
   const { runContractFunction: getUserBalance } = useWeb3Contract({
     abi: abi,

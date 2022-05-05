@@ -1,7 +1,7 @@
 import sdk from "./init-sdk.js"
 
 const nftDrop = sdk.getNFTDrop(
-  "0x854f0805dedb9df6a5B6B557F0714f5B19BC827A"
+  "0x5c6c8189daA81Ff73D800854fea1886Faa8d610d"
 )
 
 const getData = async (_tokenId) => {
