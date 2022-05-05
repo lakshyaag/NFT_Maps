@@ -1,11 +1,11 @@
 import sdk from "./init-sdk.js"
 
-const nftDrop = sdk.getNFTDrop("0x854f0805dedb9df6a5B6B557F0714f5B19BC827A")
+const nftDrop = sdk.getNFTDrop("0x5c6c8189daA81Ff73D800854fea1886Faa8d610d")
 
 const BASE_METADATA_URI =
   "ipfs://bafybeibuby4n2ulydp2ip72ispexsxduhbfk4qz4vhet4xbwqjs7hwlbhu/"
 
-const NUM_TO_MINT = 5
+const NUM_TO_MINT = 20
 
 const generateRandomIds = () => {
   const ids = []

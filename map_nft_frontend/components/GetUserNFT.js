@@ -4,16 +4,14 @@ import { useEffect, useState } from "react"
 import { formatMapData } from "../utils/formatMapData"
 import MapElement from "./MapElement"
 import { useMoralis, useWeb3Contract } from "react-moralis"
+import { THIRDWEB_IPFS_CID } from "../constants/thirdWebIPFSCID"
+import { BASE_IPFS } from "../constants/baseIPFS"
 
 export default function GetUserNFT() {
   const { isWeb3Enabled, account } = useMoralis()
 
   const [mapData, setMapData] = useState(null)
   const [balance, setBalance] = useState(null)
-
-  const BASE_URL = "https://gateway.ipfscdn.io/ipfs/"
-
-  const THIRDWEB_IPFS_CID = "QmRXYtnWwDgt9dKhMppmWghW9AHRmEfQSuDYPCYZWFZct2/"
 
   const { runContractFunction: getUserNFTBalance } = useWeb3Contract({
     abi: abi,
@@ -41,11 +39,11 @@ export default function GetUserNFT() {
 
   const getTokenURI = async (tokenId) => {
     const metadata = await (
-      await fetch(BASE_URL + THIRDWEB_IPFS_CID + tokenId)
+      await fetch(BASE_IPFS + THIRDWEB_IPFS_CID + tokenId)
     ).json()
     const metadataURI = metadata.attributes.uri.replace("ipfs://", "")
 
-    const coordsData = await (await fetch(BASE_URL + metadataURI)).json()
+    const coordsData = await (await fetch(BASE_IPFS + metadataURI)).json()
     // console.log(coordsJSON)
     return coordsData
   }
@@ -60,12 +58,10 @@ export default function GetUserNFT() {
       } catch (e) {
         console.error(e)
       }
-    } else {
-      setMapData(null)
     }
   }
 
-  console.log(mapData)
+  // console.log(mapData)
 
   useEffect(() => {
     getUserBalance()
@@ -74,7 +70,7 @@ export default function GetUserNFT() {
 
   return (
     <div className="flex flex-col">
-      <MapElement nftBounds={mapData && mapData} />
+      <MapElement nftBounds={mapData} />
     </div>
   )
 }

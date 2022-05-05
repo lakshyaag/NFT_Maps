@@ -1,2 +1,2 @@
 // Update address here whenever you deploy a new contract
-export const CONTRACT_ADDRESS = "0x854f0805dedb9df6a5B6B557F0714f5B19BC827A"
+export const CONTRACT_ADDRESS = "0x5c6c8189daA81Ff73D800854fea1886Faa8d610d"

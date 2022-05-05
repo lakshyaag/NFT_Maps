@@ -4,14 +4,12 @@ import { useEffect, useState } from "react"
 import { formatMapData } from "../utils/formatMapData"
 import MapElement from "./MapElement"
 import { ethers } from "ethers"
+import { THIRDWEB_IPFS_CID } from "../constants/thirdWebIPFSCID"
+import { BASE_IPFS } from "../constants/baseIPFS"
 
 export default function GetAllNFT() {
   const provider = new ethers.providers.AlchemyProvider("maticmum")
   const [mapData, setMapData] = useState(null)
-
-  const BASE_URL = "https://gateway.ipfscdn.io/ipfs/"
-
-  const THIRDWEB_IPFS_CID = "QmRXYtnWwDgt9dKhMppmWghW9AHRmEfQSuDYPCYZWFZct2/"
 
   const mapContract = new ethers.Contract(CONTRACT_ADDRESS, abi, provider)
 
@@ -22,11 +20,11 @@ export default function GetAllNFT() {
 
   const getTokenURI = async (tokenId) => {
     const metadata = await (
-      await fetch(BASE_URL + THIRDWEB_IPFS_CID + tokenId)
+      await fetch(BASE_IPFS + THIRDWEB_IPFS_CID + tokenId)
     ).json()
     const metadataURI = metadata.attributes.uri.replace("ipfs://", "")
 
-    const coordsData = await (await fetch(BASE_URL + metadataURI)).json()
+    const coordsData = await (await fetch(BASE_IPFS + metadataURI)).json()
     // console.log(coordsJSON)
     return coordsData
   }
@@ -39,7 +37,7 @@ export default function GetAllNFT() {
       try {
         for (var i = 0; i < supplyClaimed; i++) {
           const coordData = await getTokenURI(i)
-          console.log(coordData)
+          // console.log(coordData)
           mapData.push(coordData)
         }
         const combinedMapData = formatMapData(mapData)

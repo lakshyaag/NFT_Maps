@@ -2,10 +2,15 @@ import { CONTRACT_ADDRESS } from "../constants/contractAddress"
 import abi from "../constants/contractAbi.json"
 import { useEffect, useState } from "react"
 import { useMoralis, useWeb3Contract } from "react-moralis"
+import { BASE_IPFS } from "../constants/baseIPFS"
+import { THIRDWEB_IPFS_CID } from "../constants/thirdWebIPFSCID"
 
 export default function MintNFT() {
   const { isWeb3Enabled, account } = useMoralis()
   const [balance, setBalance] = useState(null)
+
+  const mintURL =
+    BASE_IPFS + THIRDWEB_IPFS_CID + "drop.html?contract=" + CONTRACT_ADDRESS + "&chainId=80001"
 
   const { runContractFunction: getUserBalance } = useWeb3Contract({
     abi: abi,
@@ -21,9 +26,7 @@ export default function MintNFT() {
       <button
         className="p-2 m-2 font-bold rounded-xl bg-purple-400"
         onClick={() => {
-          window.open(
-            "https://gateway.ipfscdn.io/ipfs/QmchGLcpfPcYtLkVytFX4tcb7pY5ZnjJpQkgZYWSaoWgDS/drop.html?contract=0x854f0805dedb9df6a5B6B557F0714f5B19BC827A&chainId=80001"
-          )
+          window.open(mintURL)
         }}
       >
         Mint NFT!
