@@ -25,7 +25,7 @@ export default function GetAllNFT() {
     const metadataURI = metadata.attributes.uri.replace("ipfs://", "")
 
     const coordsData = await (await fetch(BASE_IPFS + metadataURI)).json()
-    // console.log(coordsJSON)
+    // console.log(coordsData)
     return coordsData
   }
 

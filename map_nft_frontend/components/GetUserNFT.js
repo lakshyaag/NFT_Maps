@@ -27,15 +27,16 @@ export default function GetUserNFT() {
     setBalance(balance.toNumber())
   }
 
-  const { runContractFunction: getUserNFTTokenId } = useWeb3Contract({
+  const { runContractFunction: getUserNFTTokenId } = useWeb3Contract()
+
+  const getTokenIdContractOptions = {
     abi: abi,
     contractAddress: CONTRACT_ADDRESS,
     functionName: "tokenOfOwnerByIndex",
     params: {
       owner: account,
-      index: 0,
     },
-  })
+  }
 
   const getTokenURI = async (tokenId) => {
     const metadata = await (
@@ -49,11 +50,17 @@ export default function GetUserNFT() {
   }
 
   const getMapData = async () => {
+    let mapData = []
     if (balance > 0) {
       try {
-        const userTokenId = await getUserNFTTokenId()
-        const coordsData = await getTokenURI(userTokenId.toNumber())
-        const formattedMapData = formatMapData([coordsData])
+        for (var i = 0; i < balance; i++) {
+          getTokenIdContractOptions.params.index = i
+          
+          const userTokenId = await getUserNFTTokenId({ params: getTokenIdContractOptions })
+          const coordsData = await getTokenURI(userTokenId.toNumber())
+          mapData.push(coordsData)
+        }
+        const formattedMapData = formatMapData(mapData)
         setMapData(formattedMapData)
       } catch (e) {
         console.error(e)

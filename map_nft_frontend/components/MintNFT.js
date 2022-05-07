@@ -15,7 +15,8 @@ export default function MintNFT() {
     THIRDWEB_IPFS_MINT +
     "drop.html?contract=" +
     CONTRACT_ADDRESS +
-    "&chainId=80001"
+    "&chainId=80001&" +
+    "rpcUrl=https%3A%2F%2Fmatic-mumbai.chainstacklabs.com"
 
   const { runContractFunction: getUserBalance } = useWeb3Contract({
     abi: abi,
