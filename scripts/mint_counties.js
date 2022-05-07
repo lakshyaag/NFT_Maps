@@ -1,16 +1,16 @@
 import sdk from "./init-sdk.js"
 
-const nftDrop = sdk.getNFTDrop("0x5c6c8189daA81Ff73D800854fea1886Faa8d610d")
+const nftDrop = sdk.getNFTDrop("0xAA25a91f507a0A2ED9c6161EAEe68F2Aa0B5E96A")
 
 const BASE_METADATA_URI =
-  "ipfs://bafybeibuby4n2ulydp2ip72ispexsxduhbfk4qz4vhet4xbwqjs7hwlbhu/"
+  "ipfs://bafybeihzvk6d7nvg4ovlts2nfac7hqn5kszk22b53nx4noqq3sdzqpcx7e/"
 
-const NUM_TO_MINT = 20
+const NUM_TO_MINT = 50
 
 const generateRandomIds = () => {
   const ids = []
   while (ids.length < NUM_TO_MINT) {
-    var r = Math.floor(Math.random() * 52) + 1
+    var r = Math.floor(Math.random() * 100) + 1
     if (ids.indexOf(r) === -1) ids.push(r)
   }
   return ids
@@ -22,8 +22,8 @@ const createMetadata = (BASE_METADATA_URI) => {
 
   for (let i = 0; i < NUM_TO_MINT; i++) {
     let metadata = {
-      name: `Map NFT #${ids[i]}`,
-      description: "This is a map NFT",
+      name: `County NFT #${ids[i]}`,
+      description: "This is a county NFT",
       attributes: {
         uri: `${BASE_METADATA_URI}${ids[i]}.json`,
       },

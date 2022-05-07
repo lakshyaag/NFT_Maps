@@ -1,11 +1,11 @@
-import { CONTRACT_ADDRESS } from "../constants/state/contractAddress"
-import abi from "../constants/state/contractAbi.json"
+import { CONTRACT_ADDRESS } from "../../constants/county/contractAddress"
+import abi from "../../constants/county/contractAbi.json"
 import { useEffect, useState } from "react"
-import { formatMapData } from "../utils/formatMapData"
+import { formatMapData } from "../../utils/formatMapData"
 import MapElement from "./MapElement"
 import { ethers } from "ethers"
-import { THIRDWEB_IPFS_CID } from "../constants/state/thirdWebIPFSCID"
-import { BASE_IPFS } from "../constants/baseIPFS"
+import { THIRDWEB_IPFS_CID } from "../../constants/county/thirdWebIPFSCID"
+import { BASE_IPFS } from "../../constants/baseIPFS"
 
 export default function GetAllNFT() {
   const provider = new ethers.providers.AlchemyProvider("maticmum")
