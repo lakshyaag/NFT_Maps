@@ -18,25 +18,25 @@ const MapElement = ({ nftBounds }) => {
     },
   };
 
-  const textLayer = {
-    id: "textLayer",
-    type: "symbol",
-    source: geoJSON,
-    layout: {
-      "text-field": ['get', 'name'],
-      "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
-      "text-size": 8,
-      "text-transform": "uppercase",
-      "text-letter-spacing": 0.05,
-    },
-  };
+  // const textLayer = {
+  //   id: "textLayer",
+  //   type: "symbol",
+  //   source: geoJSON,
+  //   layout: {
+  //     "text-field": ['get', 'name'],
+  //     "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+  //     "text-size": 8,
+  //     "text-transform": "uppercase",
+  //     "text-letter-spacing": 0.05,
+  //   },
+  // };
 
   return (
     <Map
       initialViewState={{
         latitude: 38.8951,
         longitude: -77.0364,
-        zoom: 3,
+        zoom: 4,
       }}
       maxZoom={10}
       style={{ width: "100vw", height: "80vh" }}
@@ -45,7 +45,7 @@ const MapElement = ({ nftBounds }) => {
     >
       <Source id="nft-data" type="geojson" data={nftBounds}>
         <Layer {...fillLayer} />
-        <Layer {...textLayer} />
+        {/* <Layer {...textLayer} /> */}
       </Source>
     </Map>
   );
