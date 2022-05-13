@@ -60,7 +60,7 @@ export default function GetUserNFT() {
           const coordsData = await getTokenURI(userTokenId.toNumber())
           mapData.push(coordsData)
         }
-        const formattedMapData = formatMapData(mapData)
+        const formattedMapData = formatMapData(mapData, [])
         setMapData(formattedMapData)
       } catch (e) {
         console.error(e)

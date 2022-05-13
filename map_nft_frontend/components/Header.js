@@ -12,6 +12,9 @@ export default function Header() {
         <Link href="/state" className="mx-2">
           <a>States</a>
         </Link>
+        <Link href="/image" className="mx-2">
+          <a>Upload image</a>
+        </Link>
       </div>
       <div className="ml-auto py-2 px-4">
         <ConnectButton moralisAuth={false} />

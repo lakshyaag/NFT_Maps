@@ -1,22 +1,55 @@
-import Map, { Source, Layer } from "react-map-gl";
-import 'mapbox-gl/dist/mapbox-gl.css';
+import nftBounds from "../utils/mapdata.json"
+import Map, { Source, Layer } from "react-map-gl"
+import "mapbox-gl/dist/mapbox-gl.css"
+import { useCallback, useRef } from "react"
 
 const MapElement = ({ nftBounds }) => {
-  
+  const mapRef = useRef()
+
+  const loadImages = useCallback(() => {
+    if (nftBounds) {
+      nftBounds.features.forEach((feature) => {
+        console.log("Loading ", feature.properties.image_url)
+        try {
+          mapRef.current.loadImage(
+            feature.properties.image_url,
+            (error, image) => {
+              if (!error) {
+                mapRef.current.addImage(feature.properties.image_id, image)
+              }
+            }
+          )
+        } catch (e) {
+          console.error(e)
+        }
+      })
+    }
+  }, [nftBounds])
+
   const geoJSON = {
-    type: 'geojson',
-    data: nftBounds
+    type: "geojson",
+    data: nftBounds,
   }
-  
-  const fillLayer = {
-    id: "fillLayer",
+
+  const colorLayer = {
+    id: "colorLayer",
     type: "fill",
     source: geoJSON,
     paint: {
-      "fill-color": "#907bdb",
+      "fill-color": "#9043ca",
       "fill-opacity": 0.8,
     },
-  };
+  }
+
+  const imageLayer = {
+    id: "imageLayer",
+    type: "fill",
+    source: geoJSON,
+    paint: {
+      "fill-pattern": ["get", "image_id"],
+      "fill-opacity": 1,
+    },
+  }
 
   // const textLayer = {
   //   id: "textLayer",
@@ -33,6 +66,8 @@ const MapElement = ({ nftBounds }) => {
 
   return (
     <Map
+      ref={mapRef}
+      onLoad={loadImages}
       initialViewState={{
         latitude: 38.8951,
         longitude: -77.0364,
@@ -44,11 +79,12 @@ const MapElement = ({ nftBounds }) => {
       mapStyle="mapbox://styles/mapbox/streets-v9"
     >
       <Source id="nft-data" type="geojson" data={nftBounds}>
-        <Layer {...fillLayer} />
+        <Layer {...colorLayer} />
+        <Layer {...imageLayer} />
         {/* <Layer {...textLayer} /> */}
       </Source>
     </Map>
-  );
-};
+  )
+}
 
-export default MapElement;
+export default MapElement

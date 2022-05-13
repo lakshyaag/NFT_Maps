@@ -1,5 +1,5 @@
 import { writeFileSync } from "fs"
-import us_counties from "../utils/US_Counties.json"
+import us_counties from "../../utils/US_Counties.json"
 
 let features = us_counties.features
 

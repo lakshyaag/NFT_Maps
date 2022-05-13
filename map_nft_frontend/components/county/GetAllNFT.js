@@ -40,7 +40,7 @@ export default function GetAllNFT() {
           // console.log(coordData)
           mapData.push(coordData)
         }
-        const combinedMapData = formatMapData(mapData)
+        const combinedMapData = formatMapData(mapData, [])
         setMapData(combinedMapData)
       } catch (e) {
         console.error(e)

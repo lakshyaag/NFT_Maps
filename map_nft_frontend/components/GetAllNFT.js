@@ -32,6 +32,7 @@ export default function GetAllNFT() {
   const getAllNFT = async () => {
     const supplyClaimed = await totalSupply()
     let mapData = []
+    let imageData = []
 
     if (supplyClaimed > 0) {
       try {
@@ -40,7 +41,7 @@ export default function GetAllNFT() {
           // console.log(coordData)
           mapData.push(coordData)
         }
-        const combinedMapData = formatMapData(mapData)
+        const combinedMapData = formatMapData(mapData, imageData)
         setMapData(combinedMapData)
       } catch (e) {
         console.error(e)

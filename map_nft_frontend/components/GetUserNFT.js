@@ -1,5 +1,7 @@
 import { CONTRACT_ADDRESS } from "../constants/state/contractAddress"
 import abi from "../constants/state/contractAbi.json"
+import { STATE_IMAGE_CONTRACT_ADDRESS } from "../constants/state/stateImageContractAddress"
+import { abi as stateAbi } from "../constants/state/stateImageContractAbi.json"
 import { useEffect, useState } from "react"
 import { formatMapData } from "../utils/formatMapData"
 import MapElement from "./MapElement"
@@ -49,18 +51,46 @@ export default function GetUserNFT() {
     return coordsData
   }
 
+  const { runContractFunction: getStateImageNFTURI } = useWeb3Contract()
+
+  const getStateImageNFTURIOptions = {
+    abi: stateAbi,
+    contractAddress: STATE_IMAGE_CONTRACT_ADDRESS,
+    functionName: "getStateNftToTokenURI",
+    params: {},
+  }
+
+  const getImageURI = async (tokenId) => {
+    getStateImageNFTURIOptions.params.stateNftId = tokenId
+
+    const stateImageURI = await getStateImageNFTURI({
+      params: getStateImageNFTURIOptions,
+    })
+
+    return stateImageURI
+  }
+
   const getMapData = async () => {
     let mapData = []
+    let images = []
     if (balance > 0) {
       try {
         for (var i = 0; i < balance; i++) {
           getTokenIdContractOptions.params.index = i
-          
-          const userTokenId = await getUserNFTTokenId({ params: getTokenIdContractOptions })
+
+          const userTokenId = await getUserNFTTokenId({
+            params: getTokenIdContractOptions,
+          })
+
           const coordsData = await getTokenURI(userTokenId.toNumber())
+          const imagesData = await getImageURI(userTokenId.toNumber())
+
           mapData.push(coordsData)
+          images.push(imagesData)
         }
-        const formattedMapData = formatMapData(mapData)
+
+        const formattedMapData = formatMapData(mapData, images)
+        console.log(formattedMapData)
         setMapData(formattedMapData)
       } catch (e) {
         console.error(e)
@@ -71,13 +101,16 @@ export default function GetUserNFT() {
   // console.log(mapData)
 
   useEffect(() => {
-    getUserBalance()
     getMapData()
+  }, [account, balance])
+
+  useEffect(() => {
+    getUserBalance()
   }, [account, balance])
 
   return (
     <div className="flex flex-col">
-      <MapElement nftBounds={mapData} />
+      {mapData && <MapElement nftBounds={mapData} />}
     </div>
   )
 }

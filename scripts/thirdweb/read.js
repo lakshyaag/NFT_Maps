@@ -1,11 +1,11 @@
 import sdk from "./init-sdk.js"
 
-const CONTRACT_ADDRESS = "0xAA25a91f507a0A2ED9c6161EAEe68F2Aa0B5E96A"
+const CONTRACT_ADDRESS = "0x5c6c8189daA81Ff73D800854fea1886Faa8d610d"
 
 const nftDrop = sdk.getNFTDrop(CONTRACT_ADDRESS)
 
 const getData = async (_tokenId) => {
-  let data = await nftDrop.get("0")
+  let data = await nftDrop.get("3")
   return data
 }
 
