@@ -3,6 +3,7 @@ import abi from "../constants/state/contractAbi.json"
 import { useEffect, useState } from "react"
 import { useMoralis, useWeb3Contract } from "react-moralis"
 import { BASE_IPFS } from "../constants/baseIPFS"
+import MapElement from "./MapElement"
 
 export default function MintNFT() {
   const { isWeb3Enabled, account } = useMoralis()
@@ -15,7 +16,7 @@ export default function MintNFT() {
     THIRDWEB_IPFS_MINT +
     "drop.html?contract=" +
     CONTRACT_ADDRESS +
-    "&chainId=80001" +
+    "&chainId=80001&" +
     "rpcUrl=https%3A%2F%2Fmatic-mumbai.chainstacklabs.com"
 
   const { runContractFunction: getUserBalance } = useWeb3Contract({
@@ -29,14 +30,17 @@ export default function MintNFT() {
 
   const mintComponent = () => {
     return (
-      <button
-        className="p-2 m-2 font-bold rounded-xl bg-purple-400"
-        onClick={() => {
-          window.open(mintURL)
-        }}
-      >
-        Mint NFT!
-      </button>
+      <div className="flex flex-row items-center">
+        <button
+          type="button"
+          className="p-2 m-2 font-bold rounded-xl bg-purple-400"
+          onClick={() => {
+            window.open(mintURL)
+          }}
+        >
+          Mint NFT!
+        </button>
+      </div>
     )
   }
 
@@ -53,7 +57,12 @@ export default function MintNFT() {
 
   return (
     <div className="flex flex-col items-center">
-      {isWeb3Enabled && balance === 0 && <div>{mintComponent()}</div>}
+      {isWeb3Enabled && balance === 0 && (
+        <>
+          {mintComponent()}
+          <MapElement />
+        </>
+      )}
     </div>
   )
 }

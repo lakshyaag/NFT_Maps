@@ -14,7 +14,7 @@ export default function Home() {
       {isWeb3Enabled && account ? (
         <div>
           <div className="flex flex-col items-center justify-center">
-            {/* <MintNFT /> */}
+            <MintNFT />
             <GetUserNFT />
           </div>
         </div>
