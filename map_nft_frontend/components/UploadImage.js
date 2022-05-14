@@ -142,7 +142,7 @@ export default function UploadImage() {
   const selectNFT = () => {
     return (
       <Select
-        label="Select NFT"
+        label="Select NFT (# in wallet)"
         width="30%"
         onChange={(e) => {
           setSelectedNFTIndex(e.id)
@@ -152,25 +152,27 @@ export default function UploadImage() {
     )
   }
 
-  const showMetadata = () => {
-    if (selectedNFTMetadata) {
+  const showImage = () => {
+    if (selectedNFTMetadata?.imageUrl) {
       return (
-        <div className="flex flex-row justify-items-center space-x-2 my-2 text-xl">
-          <p className="font-bold">Selected NFT: </p>
-          <p>{selectedNFTMetadata.tokenId}</p>
+        <div>
+          <p>Image: </p>
+          <img
+            className="object-cover w-96 h-48"
+            src={selectedNFTMetadata.imageUrl}
+          />
         </div>
       )
     }
   }
 
-  const showImage = () => {
-    if (selectedNFTMetadata?.imageUrl) {
+  const showMetadata = () => {
+    if (selectedNFTMetadata) {
       return (
-        <div>
-          <img
-            className="object-cover h-48 w-96"
-            src={selectedNFTMetadata.imageUrl}
-          />
+        <div className="flex flex-col items-start text-lg">
+          <p>ID: {selectedNFTMetadata.tokenId}</p>
+          <p>Name: {selectedNFTMetadata.name}</p>
+          {selectedNFTMetadata?.imageUrl && <>{showImage()}</>}
         </div>
       )
     }
@@ -265,14 +267,14 @@ export default function UploadImage() {
   }
 
   return (
-    <div className="flex flex-col justify-center my-4 p-2 items-center space-y-6">
+    <div className="flex flex-col justify-center my-4 p-2 items-center space-y-4">
       {selectNFT()}
       {selectedNFTMetadata && (
         <>
           {showMetadata()}
           {selectedNFTMetadata?.imageUrl ? (
             <>
-              {showImage()}
+              {/* {showImage()} */}
               {imageInput()}
               {updateImage()}
             </>

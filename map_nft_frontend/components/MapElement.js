@@ -9,7 +9,7 @@ const MapElement = ({ nftBounds }) => {
   const loadImages = useCallback(() => {
     if (nftBounds) {
       nftBounds.features.forEach((feature) => {
-        console.log("Loading ", feature.properties.image_url)
+        // console.log("Loading ", feature.properties.image_url)
         try {
           mapRef.current.loadImage(
             feature.properties.image_url,
@@ -51,19 +51,6 @@ const MapElement = ({ nftBounds }) => {
     },
   }
 
-  // const textLayer = {
-  //   id: "textLayer",
-  //   type: "symbol",
-  //   source: geoJSON,
-  //   layout: {
-  //     "text-field": ['get', 'name'],
-  //     "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
-  //     "text-size": 8,
-  //     "text-transform": "uppercase",
-  //     "text-letter-spacing": 0.05,
-  //   },
-  // };
-
   return (
     <Map
       ref={mapRef}
@@ -71,7 +58,7 @@ const MapElement = ({ nftBounds }) => {
       initialViewState={{
         latitude: 38.8951,
         longitude: -77.0364,
-        zoom: 4,
+        zoom: 3,
       }}
       maxZoom={10}
       style={{ width: "100vw", height: "80vh" }}
@@ -81,7 +68,6 @@ const MapElement = ({ nftBounds }) => {
       <Source id="nft-data" type="geojson" data={nftBounds}>
         <Layer {...colorLayer} />
         <Layer {...imageLayer} />
-        {/* <Layer {...textLayer} /> */}
       </Source>
     </Map>
   )

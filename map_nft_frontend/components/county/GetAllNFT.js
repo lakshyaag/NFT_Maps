@@ -6,6 +6,7 @@ import MapElement from "./MapElement"
 import { ethers } from "ethers"
 import { THIRDWEB_IPFS_CID } from "../../constants/county/thirdWebIPFSCID"
 import { BASE_IPFS } from "../../constants/baseIPFS"
+import LoadingSpinner from "../LoadingSpinner"
 
 export default function GetAllNFT() {
   const provider = new ethers.providers.AlchemyProvider("maticmum")
@@ -53,8 +54,8 @@ export default function GetAllNFT() {
   }, [])
 
   return (
-    <div className="flex flex-col">
-      <MapElement nftBounds={mapData} />
+    <div className="flex flex-col align-middle">
+      {mapData ? <MapElement nftBounds={mapData} /> : <LoadingSpinner />}
     </div>
   )
 }

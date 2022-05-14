@@ -8,6 +8,7 @@ import MapElement from "./MapElement"
 import { useMoralis, useWeb3Contract } from "react-moralis"
 import { THIRDWEB_IPFS_CID } from "../constants/state/thirdWebIPFSCID"
 import { BASE_IPFS } from "../constants/baseIPFS"
+import LoadingSpinner from "./LoadingSpinner"
 
 export default function GetUserNFT() {
   const { isWeb3Enabled, account } = useMoralis()
@@ -90,7 +91,7 @@ export default function GetUserNFT() {
         }
 
         const formattedMapData = formatMapData(mapData, images)
-        console.log(formattedMapData)
+        // console.log(formattedMapData)
         setMapData(formattedMapData)
       } catch (e) {
         console.error(e)
@@ -109,8 +110,8 @@ export default function GetUserNFT() {
   }, [account, balance])
 
   return (
-    <div className="flex flex-col">
-      {mapData && <MapElement nftBounds={mapData} />}
+    <div className="flex flex-col align-middle">
+      {mapData ? <MapElement nftBounds={mapData} /> : <LoadingSpinner />}
     </div>
   )
 }

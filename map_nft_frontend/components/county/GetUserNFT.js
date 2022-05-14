@@ -6,6 +6,7 @@ import MapElement from "./MapElement"
 import { useMoralis, useWeb3Contract } from "react-moralis"
 import { THIRDWEB_IPFS_CID } from "../../constants/county/thirdWebIPFSCID"
 import { BASE_IPFS } from "../../constants/baseIPFS"
+import LoadingSpinner from "../LoadingSpinner"
 
 export default function GetUserNFT() {
   const { isWeb3Enabled, account } = useMoralis()
@@ -55,8 +56,10 @@ export default function GetUserNFT() {
       try {
         for (var i = 0; i < balance; i++) {
           getTokenIdContractOptions.params.index = i
-          
-          const userTokenId = await getUserNFTTokenId({ params: getTokenIdContractOptions })
+
+          const userTokenId = await getUserNFTTokenId({
+            params: getTokenIdContractOptions,
+          })
           const coordsData = await getTokenURI(userTokenId.toNumber())
           mapData.push(coordsData)
         }
@@ -76,8 +79,8 @@ export default function GetUserNFT() {
   }, [account, balance])
 
   return (
-    <div className="flex flex-col">
-      <MapElement nftBounds={mapData} />
+    <div className="flex flex-col align-middle">
+      {mapData ? <MapElement nftBounds={mapData} /> : <LoadingSpinner />}
     </div>
   )
 }
