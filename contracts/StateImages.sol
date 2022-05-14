@@ -10,6 +10,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 
 error Error__ImageNotAdded();
+error Error__UnauthorizedUser();
 
 contract StateImages is ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
@@ -19,9 +20,18 @@ contract StateImages is ERC721URIStorage, Ownable {
     mapping(uint256 => address) public stateNftOwner;
 
     event imageAdded(uint256 indexed stateNftId);
+    event imageUpdated(uint256 indexed stateNftId);
 
     constructor() ERC721("StateImage", "SIM") {
         _tokenIds.increment(); // 0
+    }
+
+    modifier nftOwner(uint256 stateNftId) {
+        if (stateNftOwner[stateNftId] != msg.sender) {
+            revert Error__UnauthorizedUser();
+        }
+
+        _;
     }
 
     function addImage(uint256 stateNftId, string memory imageURL)
@@ -39,6 +49,16 @@ contract StateImages is ERC721URIStorage, Ownable {
 
         emit imageAdded(stateNftId);
         return newItemId;
+    }
+
+    function updateImage(uint256 stateNftId, string memory imageURL)
+        public
+        nftOwner(stateNftId)
+    {
+        uint256 tokenId = stateNftToImageId[stateNftId];
+        _setTokenURI(tokenId, imageURL);
+
+        emit imageUpdated(stateNftId);
     }
 
     function getStateNftToTokenURI(uint256 stateNftId)

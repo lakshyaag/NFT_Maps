@@ -6,14 +6,18 @@ import { THIRDWEB_IPFS_CID } from "../constants/state/thirdWebIPFSCID"
 import { BASE_IPFS } from "../constants/baseIPFS"
 import { useMoralis, useWeb3Contract } from "react-moralis"
 import { useEffect, useState } from "react"
-import { Input, Select } from "web3uikit"
+import { Select } from "web3uikit"
+import { uploadStateImage } from "../utils/uploadStateImage"
+import { FileUploader } from "react-drag-drop-files"
+
+const fileTypes = ["JPG", "PNG"]
 
 export default function UploadImage() {
   const { isWeb3Enabled, account } = useMoralis()
 
   const [balance, setBalance] = useState(null)
   const [tokenList, setTokenList] = useState([])
-  const [imageURL, setImageURL] = useState(null)
+  const [imageFile, setImageFile] = useState(null)
   const [selectedNFTIndex, setSelectedNFTIndex] = useState(null)
   const [selectedNFTMetadata, setSelectedNFTMetadata] = useState(null)
 
@@ -76,6 +80,15 @@ export default function UploadImage() {
     abi: stateAbi,
     contractAddress: STATE_IMAGE_CONTRACT_ADDRESS,
     functionName: "addImage",
+    params: {},
+  }
+
+  const { runContractFunction: updateStateImageNFT } = useWeb3Contract()
+
+  const updateStateImageNFTOptions = {
+    abi: stateAbi,
+    contractAddress: STATE_IMAGE_CONTRACT_ADDRESS,
+    functionName: "updateImage",
     params: {},
   }
 
@@ -163,44 +176,85 @@ export default function UploadImage() {
     }
   }
 
+  const updateImage = () => {
+    const uploadToStorage = async () => {
+      const cid = await uploadStateImage(imageFile)
+      const imageUrl = `${BASE_IPFS}${cid}`
+      return imageUrl
+    }
+
+    const submitUpdatedImage = async () => {
+      const imageUrl = await uploadToStorage()
+
+      updateStateImageNFTOptions.params.stateNftId = selectedNFTMetadata.tokenId
+      updateStateImageNFTOptions.params.imageURL = imageUrl
+
+      const transaction = await updateStateImageNFT({
+        params: updateStateImageNFTOptions,
+      })
+
+      console.log(transaction)
+      setImageFile(null)
+    }
+
+    if (imageFile) {
+      return (
+        <div>
+          <button
+            type="button"
+            className="focus:outline-none text-white bg-amber-500 hover:bg-amber-700 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
+            onClick={() => submitUpdatedImage().then()}
+          >
+            Update image!
+          </button>
+        </div>
+      )
+    }
+  }
+
   const imageInput = () => {
+    const handleChange = (file) => {
+      setImageFile(file)
+    }
+
     return (
       <>
-        <Input
-          label="Image URL"
-          name="Add image URI"
-          onChange={(e) => {
-            setImageURL(e.target.value)
-          }}
-          prefixIcon="image"
-          type="text"
-          width="30%"
+        <FileUploader
+          name="Add/update image"
+          handleChange={handleChange}
+          types={fileTypes}
         />
-        <p className="text-center font-bold">
-          Only add links ending with PNG or JPEG.
-        </p>
       </>
     )
   }
 
   const mintImageNFT = () => {
+    const uploadToStorage = async () => {
+      const cid = await uploadStateImage(imageFile)
+      const imageUrl = `${BASE_IPFS}${cid}`
+      return imageUrl
+    }
+
     const submitImage = async () => {
+      const imageUrl = await uploadToStorage()
+
       mintStateImageNFTOptions.params.stateNftId = selectedNFTMetadata.tokenId
-      mintStateImageNFTOptions.params.imageURL = imageURL
+      mintStateImageNFTOptions.params.imageURL = imageUrl
 
       const transaction = await mintStateImageNFT({
         params: mintStateImageNFTOptions,
       })
 
       console.log(transaction)
+      setImageFile(null)
     }
 
-    if (imageURL) {
+    if (imageFile) {
       return (
         <div>
           <button
             type="button"
-            className="focus:outline-none text-white bg-green-500 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+            className="focus:outline-none text-white bg-green-500 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
             onClick={() => submitImage().then()}
           >
             Add image!
@@ -217,11 +271,17 @@ export default function UploadImage() {
         <>
           {showMetadata()}
           {selectedNFTMetadata?.imageUrl ? (
-            <>{showImage()}</>
+            <>
+              {showImage()}
+              {imageInput()}
+              {updateImage()}
+            </>
           ) : (
-            <>{imageInput()}</>
+            <>
+              {imageInput()}
+              {mintImageNFT()}
+            </>
           )}
-          {mintImageNFT()}
         </>
       )}
     </div>
