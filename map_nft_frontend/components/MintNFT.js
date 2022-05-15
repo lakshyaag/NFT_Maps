@@ -30,17 +30,15 @@ export default function MintNFT() {
 
   const mintComponent = () => {
     return (
-      <div className="flex flex-row items-center">
-        <button
-          type="button"
-          className="p-2 m-2 font-bold rounded-xl bg-purple-400"
-          onClick={() => {
-            window.open(mintURL)
-          }}
-        >
-          Mint NFT!
-        </button>
-      </div>
+      <button
+        type="button"
+        className="p-2 m-2 font-bold rounded-xl bg-purple-400"
+        onClick={() => {
+          window.open(mintURL)
+        }}
+      >
+        Mint NFT!
+      </button>
     )
   }
 

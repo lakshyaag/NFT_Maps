@@ -1,9 +1,9 @@
 const main = async () => {
-    const contractFactory = await hre.ethers.getContractFactory("StateImages")
+    const contractFactory = await hre.ethers.getContractFactory("CountyImages")
     const contract = await contractFactory.deploy()
     await contract.deployed()
   
-    console.log("State Image NFT contract deployed at:", contract.address)  
+    console.log("County Image NFT contract deployed at:", contract.address)  
   }
   
   const runMain = async () => {

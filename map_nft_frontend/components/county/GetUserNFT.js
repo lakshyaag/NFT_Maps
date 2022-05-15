@@ -1,5 +1,7 @@
 import { CONTRACT_ADDRESS } from "../../constants/county/contractAddress"
 import abi from "../../constants/county/contractAbi.json"
+import { COUNTY_IMAGE_CONTRACT_ADDRESS } from "../../constants/county/countyImageContractAddress"
+import { abi as countyAbi } from "../../constants/county/countyImageContractAbi.json"
 import { useEffect, useState } from "react"
 import { formatMapData } from "../../utils/formatMapData"
 import MapElement from "./MapElement"
@@ -50,8 +52,28 @@ export default function GetUserNFT() {
     return coordsData
   }
 
+  const { runContractFunction: getCountyImageNFTURI } = useWeb3Contract()
+
+  const getCountyImageNFTURIOptions = {
+    abi: countyAbi,
+    contractAddress: COUNTY_IMAGE_CONTRACT_ADDRESS,
+    functionName: "getStateNftToTokenURI",
+    params: {},
+  }
+
+  const getImageURI = async (tokenId) => {
+    getCountyImageNFTURIOptions.params.stateNftId = tokenId
+
+    const stateImageURI = await getCountyImageNFTURI({
+      params: getCountyImageNFTURIOptions,
+    })
+
+    return stateImageURI
+  }
+
   const getMapData = async () => {
     let mapData = []
+    let images = []
     if (balance > 0) {
       try {
         for (var i = 0; i < balance; i++) {
@@ -60,10 +82,14 @@ export default function GetUserNFT() {
           const userTokenId = await getUserNFTTokenId({
             params: getTokenIdContractOptions,
           })
+
           const coordsData = await getTokenURI(userTokenId.toNumber())
+          const imagesData = await getImageURI(userTokenId.toNumber())
+
           mapData.push(coordsData)
+          images.push(imagesData)
         }
-        const formattedMapData = formatMapData(mapData, [])
+        const formattedMapData = formatMapData(mapData, images)
         setMapData(formattedMapData)
       } catch (e) {
         console.error(e)
@@ -74,8 +100,11 @@ export default function GetUserNFT() {
   // console.log(mapData)
 
   useEffect(() => {
-    getUserBalance()
     getMapData()
+  }, [account, balance])
+
+  useEffect(() => {
+    getUserBalance()
   }, [account, balance])
 
   return (

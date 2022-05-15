@@ -1,4 +1,3 @@
-import nftBounds from "../utils/mapdata.json"
 import Map, { Source, Layer } from "react-map-gl"
 import "mapbox-gl/dist/mapbox-gl.css"
 import { useCallback, useRef } from "react"
@@ -60,7 +59,7 @@ const MapElement = ({ nftBounds }) => {
         longitude: -77.0364,
         zoom: 3,
       }}
-      maxZoom={10}
+      maxZoom={5}
       style={{ width: "100vw", height: "80vh" }}
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
       mapStyle="mapbox://styles/mapbox/streets-v9"

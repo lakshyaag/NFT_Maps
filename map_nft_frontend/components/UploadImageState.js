@@ -12,7 +12,7 @@ import { FileUploader } from "react-drag-drop-files"
 
 const fileTypes = ["JPG", "PNG"]
 
-export default function UploadImage() {
+export default function UploadImageState() {
   const { isWeb3Enabled, account } = useMoralis()
 
   const [balance, setBalance] = useState(null)

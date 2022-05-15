@@ -3,6 +3,7 @@ import abi from "../../constants/county/contractAbi.json"
 import { useEffect, useState } from "react"
 import { useMoralis, useWeb3Contract } from "react-moralis"
 import { BASE_IPFS } from "../../constants/baseIPFS"
+import MapElement from "./MapElement"
 
 export default function MintNFT() {
   const { isWeb3Enabled, account } = useMoralis()
@@ -30,6 +31,7 @@ export default function MintNFT() {
   const mintComponent = () => {
     return (
       <button
+        type="button"
         className="p-2 m-2 font-bold rounded-xl bg-purple-400"
         onClick={() => {
           window.open(mintURL)
@@ -53,7 +55,12 @@ export default function MintNFT() {
 
   return (
     <div className="flex flex-col items-center">
-      {isWeb3Enabled && balance === 0 && <div>{mintComponent()}</div>}
+      {isWeb3Enabled && balance === 0 && (
+        <>
+          {mintComponent()}
+          <MapElement />
+        </>
+      )}
     </div>
   )
 }

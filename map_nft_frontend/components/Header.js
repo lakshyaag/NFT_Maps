@@ -17,7 +17,7 @@ export default function Header() {
         </Link>
       </div>
       <div className="ml-auto py-2 px-4">
-        <ConnectButton moralisAuth={false} />
+        <ConnectButton moralisAuth={false} signingMessage="Logging in to MapNFT by @lakshyaag" />
       </div>
     </nav>
   )

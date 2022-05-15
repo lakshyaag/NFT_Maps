@@ -1,5 +1,5 @@
 const main = async () => {
-  const contractFactory = await hre.ethers.getContractFactory("StateImages")
+  const contractFactory = await hre.ethers.getContractFactory("CountyImages")
   const contract = await contractFactory.deploy()
   await contract.deployed()
 
