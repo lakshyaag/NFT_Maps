@@ -9,6 +9,8 @@ import { Select } from "web3uikit"
 import { uploadCountyImage } from "../../utils/uploadCountyImage"
 import { FileUploader } from "react-drag-drop-files"
 
+import ReactCrop from "react-image-crop"
+
 const fileTypes = ["JPG", "PNG"]
 
 export default function UploadImageCounty() {
@@ -19,6 +21,12 @@ export default function UploadImageCounty() {
   const [imageFile, setImageFile] = useState(null)
   const [selectedNFTIndex, setSelectedNFTIndex] = useState(null)
   const [selectedNFTMetadata, setSelectedNFTMetadata] = useState(null)
+
+  const [crop, setCrop] = useState({
+    unit: "px",
+    width: 64,
+    height: 64,
+  })
 
   const { runContractFunction: getUserNFTBalance } = useWeb3Contract({
     abi: abi,
@@ -136,6 +144,7 @@ export default function UploadImageCounty() {
 
   useEffect(() => {
     getTokenMetadata()
+    setImageFile(null)
   }, [selectedNFTIndex])
 
   const selectNFT = () => {
@@ -157,7 +166,7 @@ export default function UploadImageCounty() {
         <div>
           <p>Image: </p>
           <img
-            className="object-cover w-96 h-48"
+            className="object-cover"
             src={selectedNFTMetadata.imageUrl}
           />
         </div>
@@ -179,7 +188,15 @@ export default function UploadImageCounty() {
 
   const updateImage = () => {
     const uploadToStorage = async () => {
-      const cid = await uploadCountyImage(imageFile)
+      const croppedImageFile = await getCroppedImage(imageFile, crop).then(
+        (res) => {
+          return res
+        }
+      )
+
+      console.log(URL.createObjectURL(croppedImageFile))
+
+      const cid = await uploadCountyImage(croppedImageFile)
       const imageUrl = `${BASE_IPFS}${cid}`
       return imageUrl
     }
@@ -187,7 +204,8 @@ export default function UploadImageCounty() {
     const submitUpdatedImage = async () => {
       const imageUrl = await uploadToStorage()
 
-      updateCountyImageNFTOptions.params.stateNftId = selectedNFTMetadata.tokenId
+      updateCountyImageNFTOptions.params.stateNftId =
+        selectedNFTMetadata.tokenId
       updateCountyImageNFTOptions.params.imageURL = imageUrl
 
       const transaction = await updateCountyImageNFT({
@@ -200,7 +218,10 @@ export default function UploadImageCounty() {
 
     if (imageFile) {
       return (
-        <div>
+        <div className="flex flex-col items-center m-2 gap-y-4">
+          <ReactCrop crop={crop} locked={true} onChange={(c) => setCrop(c)}>
+            <img src={URL.createObjectURL(imageFile)} id="uploaded-image" />
+          </ReactCrop>
           <button
             type="button"
             className="focus:outline-none text-white bg-amber-500 hover:bg-amber-700 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
@@ -229,9 +250,58 @@ export default function UploadImageCounty() {
     )
   }
 
+  const getCroppedImage = async (imageFile, crop) => {
+    const imageShown = document.getElementById("uploaded-image")
+
+    const canvas = document.createElement("canvas")
+    canvas.width = crop.width
+    canvas.height = crop.height
+    const ctx = canvas.getContext("2d")
+
+    const image = new Image()
+
+    const promise = new Promise((resolve, reject) => {
+      image.src = URL.createObjectURL(imageFile)
+      image.onload = function () {
+        const scaleX = image.width / imageShown.clientWidth
+        const scaleY = image.height / imageShown.clientHeight
+
+        ctx.drawImage(
+          image,
+          crop.x * scaleX,
+          crop.y * scaleY,
+          crop.width,
+          crop.height,
+          0,
+          0,
+          crop.width,
+          crop.height
+        )
+        resolve()
+      }
+    }).then(function () {
+      return new Promise((resolve, reject) => {
+        canvas.toBlob((blob) => {
+          blob.name = "cropped.png"
+          resolve(blob)
+        }, "image/png")
+      })
+    })
+
+    return promise
+  }
+
   const mintImageNFT = () => {
     const uploadToStorage = async () => {
-      const cid = await uploadCountyImage(imageFile)
+      const croppedImageFile = await getCroppedImage(imageFile, crop).then(
+        (res) => {
+          return res
+        }
+      )
+
+      console.log(URL.createObjectURL(croppedImageFile))
+
+      const cid = await uploadCountyImage(croppedImageFile)
       const imageUrl = `${BASE_IPFS}${cid}`
       return imageUrl
     }
@@ -248,11 +318,15 @@ export default function UploadImageCounty() {
 
       console.log(transaction)
       setImageFile(null)
+      setCrop()
     }
 
     if (imageFile) {
       return (
-        <div>
+        <div className="flex flex-col items-center m-2 gap-y-4">
+          <ReactCrop crop={crop} locked={true} onChange={(c) => setCrop(c)}>
+            <img src={URL.createObjectURL(imageFile)} id="uploaded-image" />
+          </ReactCrop>
           <button
             type="button"
             className="focus:outline-none text-white bg-green-500 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
