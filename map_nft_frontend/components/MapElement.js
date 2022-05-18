@@ -56,7 +56,6 @@ const MapElement = ({ nftBounds }) => {
     source: geoJSON,
     layout: {
       "icon-image": ["get", "image_id"],
-      "icon-allow-overlap": "true",
       "icon-size": [
         "interpolate",
         ["exponential", 4],
