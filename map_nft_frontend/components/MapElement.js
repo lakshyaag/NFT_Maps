@@ -40,13 +40,34 @@ const MapElement = ({ nftBounds }) => {
     },
   }
 
-  const imageLayer = {
-    id: "imageLayer",
-    type: "fill",
+  // const imageLayer = {
+  //   id: "imageLayer",
+  //   type: "fill",
+  //   source: geoJSON,
+  //   paint: {
+  //     "fill-pattern": ["get", "image_id"],
+  //     "fill-opacity": 1,
+  //   },
+  // }
+
+  const symbolLayer = {
+    id: "symbolLayer",
+    type: "symbol",
     source: geoJSON,
-    paint: {
-      "fill-pattern": ["get", "image_id"],
-      "fill-opacity": 1,
+    layout: {
+      "icon-image": ["get", "image_id"],
+      "icon-allow-overlap": "true",
+      "icon-size": [
+        "interpolate",
+        ["exponential", 4],
+        ["zoom"],
+        1,
+        0.2,
+        3,
+        0.3,
+        5,
+        0.75,
+      ],
     },
   }
 
@@ -66,7 +87,8 @@ const MapElement = ({ nftBounds }) => {
     >
       <Source id="nft-data" type="geojson" data={nftBounds}>
         <Layer {...colorLayer} />
-        <Layer {...imageLayer} />
+        {/* <Layer {...imageLayer} /> */}
+        <Layer {...symbolLayer} />
       </Source>
     </Map>
   )
