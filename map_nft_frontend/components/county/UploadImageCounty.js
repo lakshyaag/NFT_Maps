@@ -165,10 +165,7 @@ export default function UploadImageCounty() {
       return (
         <div>
           <p>Image: </p>
-          <img
-            className="object-cover"
-            src={selectedNFTMetadata.imageUrl}
-          />
+          <img className="object-cover" src={selectedNFTMetadata.imageUrl} />
         </div>
       )
     }
