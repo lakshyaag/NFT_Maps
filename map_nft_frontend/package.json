@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.6.1",
+    "@turf/centroid": "^6.5.0",
     "mapbox-gl": "^2.8.2",
     "moralis": "^1.6.0",
     "next": "12.1.6",
